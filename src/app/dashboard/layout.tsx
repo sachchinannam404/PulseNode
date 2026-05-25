@@ -6,6 +6,7 @@ import { Activity, Users, Calendar, Pill, Microscope, CreditCard, BarChart3, Shi
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 const navItems = [
   { icon: BarChart3, label: "Overview", href: "/dashboard" },
