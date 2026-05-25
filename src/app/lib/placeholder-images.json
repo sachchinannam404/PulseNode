@@ -1,0 +1,29 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "medical-hero",
+      "description": "Modern hospital hallway",
+      "imageUrl": "https://picsum.photos/seed/med1/1200/600",
+      "imageHint": "modern hospital"
+    },
+    {
+      "id": "doctor-portrait",
+      "description": "Professional doctor portrait",
+      "imageUrl": "https://picsum.photos/seed/doc1/400/400",
+      "imageHint": "doctor professional"
+    },
+    {
+      "id": "lab-results",
+      "description": "Microscopic view of cells",
+      "imageUrl": "https://picsum.photos/seed/lab1/600/400",
+      "imageHint": "laboratory microscope"
+    },
+    {
+      "id": "mri-scan",
+      "description": "MRI scan visualization",
+      "imageUrl": "https://picsum.photos/seed/mri/800/600",
+      "imageHint": "mri scan"
+    }
+  ]
+}
