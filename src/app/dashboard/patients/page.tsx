@@ -1,6 +1,8 @@
+
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,7 +14,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function PatientsPage() {
+  const router = useRouter();
   const [isAdmissionOpen, setIsAdmissionOpen] = useState(false);
+  
+  // Mock data - in a real app, this would come from useCollection(patientsQuery)
   const patients = [
     { id: "PX-1029", name: "Alice Johnson", age: 42, gender: "F", condition: "Post-op Cardiac", status: "Stable", lastVisit: "2h ago", attending: "Dr. Miller" },
     { id: "PX-1030", name: "Michael Smith", age: 65, gender: "M", condition: "Type 2 Diabetes", status: "Observation", lastVisit: "1h ago", attending: "Dr. Chen" },
@@ -160,7 +165,11 @@ export default function PatientsPage() {
           </TableHeader>
           <TableBody>
             {patients.map((patient) => (
-              <TableRow key={patient.id} className="cursor-pointer hover:bg-secondary/10">
+              <TableRow 
+                key={patient.id} 
+                className="cursor-pointer hover:bg-secondary/10"
+                onClick={() => router.push(`/dashboard/patients/${patient.id}`)}
+              >
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded bg-primary/10 text-primary flex items-center justify-center font-bold text-[10px]">
@@ -189,10 +198,13 @@ export default function PatientsPage() {
                 <TableCell className="text-sm font-medium">{patient.attending}</TableCell>
                 <TableCell className="text-right">
                    <div className="flex items-center justify-end gap-2">
-                     <Button variant="ghost" size="icon" className="h-8 w-8 text-primary">
+                     <Button variant="ghost" size="icon" className="h-8 w-8 text-primary" onClick={(e) => {
+                       e.stopPropagation();
+                       router.push(`/dashboard/patients/${patient.id}`);
+                     }}>
                        <FileText className="h-4 w-4" />
                      </Button>
-                     <Button variant="ghost" size="icon" className="h-8 w-8">
+                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}>
                        <MoreHorizontal className="h-4 w-4" />
                      </Button>
                    </div>
