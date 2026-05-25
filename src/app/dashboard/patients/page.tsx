@@ -1,13 +1,19 @@
 
+"use client";
+
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search, Plus, Filter, FileText, Calendar, MoreHorizontal, User } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Search, Plus, Filter, FileText, MoreHorizontal, User, UserPlus } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function PatientsPage() {
+  const [isAdmissionOpen, setIsAdmissionOpen] = useState(false);
   const patients = [
     { id: "PX-1029", name: "Alice Johnson", age: 42, gender: "F", condition: "Post-op Cardiac", status: "Stable", lastVisit: "2h ago", attending: "Dr. Miller" },
     { id: "PX-1030", name: "Michael Smith", age: 65, gender: "M", condition: "Type 2 Diabetes", status: "Observation", lastVisit: "1h ago", attending: "Dr. Chen" },
@@ -24,12 +30,81 @@ export default function PatientsPage() {
           <p className="text-sm text-muted-foreground">Manage digital health records and telehealth integration</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2">
-            <Filter className="h-4 w-4" /> Filter
-          </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-white gap-2 font-headline">
-            <Plus className="h-4 w-4" /> New Admission
-          </Button>
+          <Select defaultValue="all">
+            <SelectTrigger className="w-[140px]">
+              <Filter className="mr-2 h-4 w-4" />
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="critical">Critical</SelectItem>
+              <SelectItem value="stable">Stable</SelectItem>
+              <SelectItem value="observation">Observation</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <Dialog open={isAdmissionOpen} onOpenChange={setIsAdmissionOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-primary hover:bg-primary/90 text-white gap-2 font-headline">
+                <Plus className="h-4 w-4" /> New Admission
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[525px]">
+              <DialogHeader>
+                <DialogTitle className="font-headline text-xl">New Patient Admission</DialogTitle>
+                <DialogDescription>Initialize a new EMR record for patient intake.</DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input id="name" placeholder="John Doe" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dob">Date of Birth</Label>
+                    <Input id="dob" type="date" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="gender">Gender Identity</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="m">Male</SelectItem>
+                        <SelectItem value="f">Female</SelectItem>
+                        <SelectItem value="o">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="blood">Blood Type</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ap">A+</SelectItem>
+                        <SelectItem value="an">A-</SelectItem>
+                        <SelectItem value="op">O+</SelectItem>
+                        <SelectItem value="on">O-</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="condition">Admitting Diagnosis</Label>
+                  <Input id="condition" placeholder="Reason for admission" />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsAdmissionOpen(false)}>Cancel</Button>
+                <Button className="bg-primary" onClick={() => setIsAdmissionOpen(false)}>Create Record</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
