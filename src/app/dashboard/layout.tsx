@@ -1,5 +1,6 @@
 "use client";
 
+import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { Activity, Users, Calendar, Pill, Microscope, CreditCard, BarChart3, ShieldCheck, Settings, LogOut, Bell } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,9 +21,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
 
   return (
-    // <SidebarProvider>
+    <SidebarProvider>
       <div className="flex min-h-screen w-full">
-        {/* <Sidebar className="border-r border-border/50 bg-card">
+        <Sidebar className="border-r border-border/50 bg-card">
           <SidebarHeader className="p-4 border-b">
             <Link className="flex items-center space-x-2" href="/">
               <Activity className="h-6 w-6 text-primary" />
@@ -70,11 +71,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </SidebarMenu>
             </div>
           </SidebarFooter>
-        </Sidebar> */}
-        {/* <SidebarInset className="flex-1 flex flex-col min-w-0 bg-background overflow-hidden"> */}
+        </Sidebar>
+        <SidebarInset className="flex-1 flex flex-col min-w-0 bg-background overflow-hidden">
           <header className="h-14 border-b bg-card/30 backdrop-blur-sm flex items-center justify-between px-6 sticky top-0 z-40">
             <div className="flex items-center gap-4">
-              {/* <SidebarTrigger /> */}
+              <SidebarTrigger />
               <h2 className="text-sm font-headline font-bold uppercase tracking-widest text-muted-foreground">
                 {navItems.find(item => item.href === pathname)?.label || 'Dashboard'}
               </h2>
@@ -94,8 +95,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <main className="flex-1 overflow-y-auto p-6 scroll-smooth">
             {children}
           </main>
-        {/* </SidebarInset> */}
+        </SidebarInset>
       </div>
-    // </SidebarProvider>
+    </SidebarProvider>
   );
 }
