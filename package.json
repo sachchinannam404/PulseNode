@@ -43,7 +43,7 @@
     "firebase": "^12.13.0",
     "genkit": "^1.35.0",
     "lucide-react": "^1.16.0",
-    "next": "^16.2.6",
+    "next": "^9.3.3",
     "patch-package": "^8.0.1",
     "react": "^19.2.6",
     "react-day-picker": "^10.0.1",
@@ -58,7 +58,7 @@
     "@types/node": "^25",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "genkit-cli": "^1.35.0",
+    "genkit-cli": "^0.0.2",
     "postcss": "^8",
     "tailwindcss": "^4.3.0",
     "typescript": "^6"
