@@ -1,67 +1,41 @@
 
 "use client";
 
-import { useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { useDoc, useCollection, useFirestore } from '@/firebase';
-import { doc, collection, query, orderBy } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  ChevronLeft, 
-  FileText, 
-  Pill, 
-  Activity, 
-  Clock, 
-  Calendar, 
-  User, 
+import {
+  ChevronLeft,
+  FileText,
+  Pill,
+  Activity,
+  Clock,
+  Calendar,
+  User,
   Stethoscope,
   Plus
 } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { dummyAppointments, dummyPrescriptions } from "@/lib/dummy-data";
+
+// Dummy patient data
+const dummyPatient = {
+  name: "John Doe",
+  mrn: "123456",
+  gender: "Male",
+  bloodType: "O+",
+  dob: "1990-01-01",
+  status: "Stable",
+  attendingDoctor: "Dr. Smith",
+  condition: "Common Cold",
+};
 
 export default function PatientDetailPage() {
-  const { patientId } = useParams() as { patientId: string };
   const router = useRouter();
-  const db = useFirestore();
-
-  const patientRef = useMemo(() => (db ? doc(db, 'patients', patientId) : null), [db, patientId]);
-  const { data: patient, loading: patientLoading } = useDoc(patientRef);
-
-  const visitsQuery = useMemo(() => {
-    if (!db || !patientId) return null;
-    return query(collection(db, 'patients', patientId, 'visits'), orderBy('date', 'desc'));
-  }, [db, patientId]);
-  const { data: visits, loading: visitsLoading } = useCollection(visitsQuery);
-
-  const prescriptionsQuery = useMemo(() => {
-    if (!db || !patientId) return null;
-    return collection(db, 'patients', patientId, 'prescriptions');
-  }, [db, patientId]);
-  const { data: prescriptions, loading: prescriptionsLoading } = useCollection(prescriptionsQuery);
-
-  if (patientLoading) {
-    return (
-      <div className="space-y-6">
-        <Skeleton className="h-10 w-48" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Skeleton className="h-64 col-span-1" />
-          <Skeleton className="h-64 col-span-2" />
-        </div>
-      </div>
-    );
-  }
-
-  if (!patient && !patientLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <h2 className="text-xl font-headline font-bold">Patient Not Found</h2>
-        <Button variant="link" onClick={() => router.push('/dashboard/patients')}>Return to Repository</Button>
-      </div>
-    );
-  }
+  const patient = dummyPatient;
+  const visits = dummyAppointments;
+  const prescriptions = dummyPrescriptions;
 
   return (
     <div className="space-y-6">
@@ -95,7 +69,7 @@ export default function PatientDetailPage() {
               <DetailItem label="Date of Birth" value={patient?.dob} />
               <DetailItem label="Status" value={
                 <Badge className={
-                  patient?.status === 'Stable' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
+                  patient?.status === 'Stable' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
                   patient?.status === 'Observation' ? 'bg-amber-50 text-amber-700 border-amber-200' :
                   patient?.status === 'Critical' ? 'bg-destructive/10 text-destructive border-destructive/20' : 'bg-blue-50 text-blue-700'
                 }>
@@ -137,11 +111,9 @@ export default function PatientDetailPage() {
               <TabsTrigger value="prescriptions" className="gap-2"><Pill className="h-4 w-4" /> Prescriptions</TabsTrigger>
               <TabsTrigger value="history" className="gap-2"><FileText className="h-4 w-4" /> Clinical History</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="visits" className="mt-6 space-y-4">
-              {visitsLoading ? (
-                Array(3).fill(0).map((_, i) => <Skeleton key={i} className="h-24 w-full" />)
-              ) : visits?.length === 0 ? (
+              {visits?.length === 0 ? (
                 <div className="text-center py-10 text-muted-foreground">No visits recorded yet.</div>
               ) : (
                 visits?.map((visit) => (
@@ -173,9 +145,7 @@ export default function PatientDetailPage() {
             </TabsContent>
 
             <TabsContent value="prescriptions" className="mt-6 space-y-4">
-               {prescriptionsLoading ? (
-                Array(3).fill(0).map((_, i) => <Skeleton key={i} className="h-24 w-full" />)
-              ) : prescriptions?.length === 0 ? (
+              {prescriptions?.length === 0 ? (
                 <div className="text-center py-10 text-muted-foreground">No active prescriptions.</div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
